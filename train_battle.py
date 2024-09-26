@@ -36,7 +36,8 @@ if __name__ == '__main__':
     parser.add_argument('--algo', type=str, choices={'ac', 'mfac', 'mfq', 'il'}, help='choose an algorithm from the preset', required=True)
     parser.add_argument('--save_every', type=int, default=10, help='decide the self-play update interval')
     parser.add_argument('--update_every', type=int, default=5, help='decide the udpate interval for q-learning, optional')
-    parser.add_argument('--n_round', type=int, default=2000, help='set the trainning round')
+    parser.add_argument('--n_round', type=int, default=200, help='set the trainning round')
+    # parser.add_argument('--n_round', type=int, default=2000, help='set the trainning round')
     parser.add_argument('--render', action='store_true', help='render or not (if true, will render every save)')
     parser.add_argument('--map_size', type=int, default=40, help='set the size of map')  # then the amount of agents is 64
     parser.add_argument('--max_steps', type=int, default=400, help='set the max steps')
@@ -71,3 +72,4 @@ if __name__ == '__main__':
     for k in range(start_from, start_from + args.n_round):
         eps = linear_decay(k, [0, int(args.n_round * 0.8), args.n_round], [1, 0.2, 0.1])
         runner.run(eps, k)
+

@@ -14,7 +14,8 @@ parser = argparse.ArgumentParser(description=None)
 parser.add_argument('-n', '--num_agents', default=100, type=int)
 parser.add_argument('-t', '--temperature', default=1, type=float)
 parser.add_argument('-epi', '--episode', default=1, type=int)
-parser.add_argument('-ts', '--time_steps', default=10000, type=int)
+parser.add_argument('-ts', '--time_steps', default=1000, type=int)
+# parser.add_argument('-ts', '--time_steps', default=10000, type=int)
 parser.add_argument('-lr', '--learning_rate', default=0.1, type=float)
 parser.add_argument('-dr', '--decay_rate', default=0.99, type=float)
 parser.add_argument('-dg', '--decay_gap', default=2000, type=int)
@@ -22,7 +23,8 @@ parser.add_argument('-ac', '--act_rate', default=1.0, type=float)
 parser.add_argument('-ns', '--neighbor_size', default=4, type=int)
 parser.add_argument('-s', '--scenario', default='Ising.py',
                     help='Path of the scenario Python script.')
-parser.add_argument('-p', '--plot', default=0, type=int)
+# parser.add_argument('-p', '--plot', default=0, type=int)
+parser.add_argument('-p', '--plot', default=1, type=int)
 args = parser.parse_args()
 
 # load scenario from script
@@ -159,11 +161,25 @@ for i_episode in range(n_episode):
           (i_episode, t, sum(reward), mse, order_param, ups, downs))
 
   if if_plot:
-    plt.figure(2)
-    ising_plot = display
-    im.set_data(ising_plot)
-    plt.savefig(folder + '%d-%d-%d-%.3f-%s.png'
-                % (t, ups, downs, order_param, time.strftime("%Y%m%d-%H%M%S")))
+      plt.figure(2)
+      ising_plot = display
+      im.set_data(ising_plot)  # 更新图像数据
+      plt.title(f'Episode {i_episode}, Step {t}')  # 添加标题
+      plt.colorbar()  # 添加颜色条
+      plt.pause(5)  # 暂停以更新图像
+      plt.savefig(folder + '%d-%d-%d-%.3f-%s.png'
+                  % (t, ups, downs, order_param, time.strftime("%Y%m%d-%H%M%S")))
+  if if_plot:
+    plt.ioff()  # 关闭交互模式
+    plt.show()  # 显示最终图像
+  # if if_plot:
+  #   plt.figure(2)
+  #   ising_plot = display
+  #   im.set_data(ising_plot)
+  #   # 展示图片
+  #   plt.show()
+  #   plt.savefig(folder + '%d-%d-%d-%.3f-%s.png'
+  #               % (t, ups, downs, order_param, time.strftime("%Y%m%d-%H%M%S")))
 
   print('Episode: %d, MaxO = %f at %d (%d/%d)' %
         (i_episode, max_order, max_order_step, o_up, o_down))
